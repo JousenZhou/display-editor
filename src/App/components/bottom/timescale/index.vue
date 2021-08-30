@@ -35,9 +35,6 @@
 import { Options, mixins } from 'vue-class-component';
 import { PropSync, Watch } from '@/decorator';
 import { computedVux } from '@/App/store/index';
-// import { Watch } from '@/decorator';
-
-// let setIntervalLoop = null;
 @Options({
     name: 'timescale',
     components: {}
@@ -47,8 +44,8 @@ export default class App extends mixins(computedVux) {
     @PropSync('scrollTop', { required: true }) scroll;
     @Watch('vm_timestampStatus')
     onStatusChange(status) {
-        if (window.sceneManage['mmdHelper']) {
-            let helper = window.sceneManage['mmdHelper'];
+        if (this.vm_sceneManage['mmdHelper']) {
+            let helper = this.vm_sceneManage['mmdHelper'];
             status ? helper.start() : helper.stop();
         }
     }
@@ -75,7 +72,7 @@ export default class App extends mixins(computedVux) {
     }
     // 过滤mmdHelper
     get mmdHelperArray() {
-        return this.vm_structure
+        return this.vm_sceneStructure
             .filter((em) => em.type === 'mmdHelper')
             .reduce((x, y) => {
                 return [...x, ...y.children];
@@ -101,8 +98,8 @@ export default class App extends mixins(computedVux) {
     }
     // 同步动作
     synchronize(value) {
-        if (window.sceneManage['mmdHelper']) {
-            let helper = window.sceneManage['mmdHelper'];
+        if (this.vm_sceneManage['mmdHelper']) {
+            let helper = this.vm_sceneManage['mmdHelper'];
             helper.synchronize(value);
         }
     }

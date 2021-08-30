@@ -3,7 +3,7 @@ import { initDragControls, initialScene, MMdDrive, ambient, directional } from '
 // import { useStore } from 'vuex';
 // eslint-disable-next-line no-unused-vars
 export default async function (THREE, Vue) {
-    this.expandPlugin({ MMdDrive, initDragControls });
+    this.expandPlugin({ MMdDrive,initDragControls });
     // eslint-disable-next-line no-unused-vars
     let { loadMMdModel, loadMMdAnimation, MMdBindAnimation, loadMMdCamera, createdMMdHelper, helperRelateMMd, helperRelateCamera } = this;
     // eslint-disable-next-line no-unused-vars
@@ -117,10 +117,11 @@ export default async function (THREE, Vue) {
     spotLight.position.set(-40, 60, -10);
     spotLight.castShadow = true;
     scene.add(spotLight);
-    this.camera.position.x = -30;
-    this.camera.position.y = 40;
-    this.camera.position.z = 30;
-    this.camera.lookAt(scene.position);
+
+    // this.camera.position.x = -30;
+    // this.camera.position.y = 40;
+    // this.camera.position.z = 30;
+    // this.camera.lookAt(scene.position);
 
 
     for (let a = 0; a < 30; a++) {

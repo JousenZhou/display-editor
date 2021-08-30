@@ -19,7 +19,7 @@ export default class App extends mixins() {
     labelStructure = [
         { label: '基础元件', value: 'baseElement' },
         { label: '模型库', value: 'model' },
-        { label: '插件', value: 'plugins' }
+        // { label: '插件', value: 'plugins' }
     ];
     // 当前激活的标签
     activeLabelName = 'baseElement';

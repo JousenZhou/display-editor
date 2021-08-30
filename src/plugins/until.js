@@ -3,6 +3,8 @@
  * @author JousenZhou
  * @date 2021/5/26 13:40
  */
+import { createApp } from 'vue';
+
 export const proxy = function (obj, callback, parentKey = []) {
     if (typeof obj === 'object') {
         for (let key in obj) {
@@ -47,6 +49,12 @@ export const proxy = function (obj, callback, parentKey = []) {
         deleteProperty(target, key) {
             callback('delete', { target, key });
             return Reflect.deleteProperty(target, key);
+        },
+        ownKeys(target) {
+            return Reflect.ownKeys(target);
+        },
+        get: function (target, key) {
+            return target[key];
         }
     });
 };
@@ -54,4 +62,12 @@ export const sort = function (arr) {
     return arr.sort(function (a, b) {
         return a.localeCompare(b);
     });
+};
+export const test = function (object) {
+    let _ = createApp({
+        data() {
+            return object;
+        }
+    }).mount(document.createElement('div'));
+    return _.$data
 };

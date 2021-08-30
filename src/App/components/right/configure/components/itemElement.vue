@@ -2,7 +2,7 @@
     <template v-for="(item, index) in renderList">
         <div class="itemElement-list" :key="index" v-if="!item.if || displayCondition(item.if)">
             <template v-if="String(item.type) === 'array'">
-                <el-collapse v-model="collapse">
+                <el-collapse>
                     <el-collapse-item :title="item.label" name="collapse">
                         <itemElement v-model:list="item.children" v-model:data="renderData" />
                     </el-collapse-item>
@@ -36,7 +36,7 @@
                     ></el-color-picker>
                     <template v-if="String(item.type) === 'input'">
                         <span class="inputElement">
-                            <el-slider :show-tooltip="false" :model-value="analysis(item.mapping)" @input="change(item.mapping, $event)" />
+                            <!--                            <el-slider :show-tooltip="false" :model-value="analysis(item.mapping)" @input="change(item.mapping, $event)" />-->
                             <el-input-number
                                 :controls="false"
                                 size="mini"
@@ -196,7 +196,7 @@ export default class App extends mixins() {
             padding: 0 !important;
         }
     }
-    &:last-of-type{
+    &:last-of-type {
         border-bottom-width: 0;
     }
 }

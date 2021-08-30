@@ -1,6 +1,6 @@
 <template>
     <div class="structure">
-        <el-tree ref="ElTree" :data="vm_structure" :highlight-current="true" node-key="uuid" :props="defaultProps" @node-click="handleNodeClick">
+        <el-tree ref="ElTree" :data="vm_sceneStructure" :highlight-current="true" node-key="uuid" :props="defaultProps" @node-click="handleNodeClick">
             <template #default="{ data }">
                 <span class="el-tree-node__label" :id="data.uuid">{{ data.name }}</span>
             </template>

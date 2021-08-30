@@ -22,7 +22,7 @@ export default class App extends mixins(computedVux) {
     onIdChange(uuId) {
         if (this.vm_current.type) {
             this.renderList = config[this.vm_current.type];
-            this.renderData = window.sceneManage.$data[uuId];
+            this.renderData = this.vm_sceneManage[uuId];
         }
     }
 }

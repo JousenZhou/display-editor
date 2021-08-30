@@ -17,7 +17,7 @@ import { Options, mixins } from 'vue-class-component';
 export default class App extends mixins() {
     // 结构标签
     labelStructure = [
-        { label: '材质列表', value: 'material' },
+        // { label: '材质列表', value: 'material' },
         { label: '场景结构', value: 'structure' },
         { label: '目标属性', value: 'configure' }
     ];

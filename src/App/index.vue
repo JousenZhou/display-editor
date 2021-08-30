@@ -10,7 +10,6 @@
 </template>
 
 <script>
-// import { useStore } from 'vuex';
 import { Options, mixins } from 'vue-class-component';
 import { Ref } from '@/decorator';
 import ThreeJs from '@/plugins/editor';
@@ -25,21 +24,19 @@ export default class App extends mixins(registerVuexModule) {
     @Ref('ThreeJs') ThreeJs;
     mounted() {
         let this_ = this;
-        // eslint-disable-next-line no-unused-vars
-        let example = new ThreeJs({
+        let threeJsEngine = new ThreeJs({
             el: this.ThreeJs,
             stats: this.ThreeJs,
-            structure: this.vm_structure,
+            namespaced:'threeJs',
             options: {
                 backgroundColor: '#ffffff',
                 alpha: true,
                 antialias: true,
                 shadowMapEnabled: true
-            },
-            mounted: function (THREE) {
-                example2.bind(this)(THREE, this_);
             }
         });
+        window.Engine = threeJsEngine;
+        threeJsEngine.mounted(example2, this_);
     }
 }
 </script>

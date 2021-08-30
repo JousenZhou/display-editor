@@ -58,7 +58,7 @@ export default class App extends mixins(computedVux) {
     }
     // 过滤mmdHelper
     get mmdHelperArray() {
-        return (this.vm_structure || [])
+        return (this.vm_sceneStructure || [])
             .filter((em) => em.type === 'mmdHelper')
             .reduce((x, y) => {
                 return [...x, ...y.children];
@@ -95,8 +95,8 @@ export default class App extends mixins(computedVux) {
     }
     // 同步动作
     synchronize(value) {
-        if (window.sceneManage['mmdHelper']) {
-            let helper = window.sceneManage['mmdHelper'];
+        if (this.vm_sceneManage['mmdHelper']) {
+            let helper = this.vm_sceneManage['mmdHelper'];
             helper.synchronize(value);
         }
     }
