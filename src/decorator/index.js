@@ -7,5 +7,6 @@ import { Inject } from './Inject';
 import { Provide } from './Provide';
 import { InjectReactive } from './InjectReactive';
 import { ProvideReactive } from './ProvideReactive';
+import { Computed } from './computed';
 
-export { Prop, PropSync, Ref, Watch, WatchMounted, Setup, Emit, Inject, Provide, InjectReactive, ProvideReactive };
+export { Prop, PropSync, Ref, Watch, WatchMounted, Setup, Emit, Inject, Provide, InjectReactive, ProvideReactive, Computed };

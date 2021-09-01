@@ -4,33 +4,36 @@
  * @date 2021/5/25 13:43
  */
 let { THREE, Detector } = window;
-import store from '@/store';
 import Element from './element';
+import { reactive } from 'vue';
 export default class {
     // 根节点
     root = null;
-    // 场景管理器[对象式]
+    // 数据集合
+    dataSet = reactive({
+        proxyManage: {},
+        sceneStructure: [
+            { name: '基础', type: 'base', children: [] },
+            { name: '摄像机', type: 'cameraGroup', children: [] },
+            { name: '光源', type: 'lightGroup', children: [] }
+        ]
+    });
     sceneManage = {};
     // 渲染拓展函数对象存储
     renderExtra = {};
     // 时序
     clock = new THREE.Clock();
-    // 场景结构
-    sceneStructure = [];
-    mounted = function (func, ...other) {
-        func.bind(this)(THREE, ...other);
-    };
+    // 启动脚本
+    mounted = new Function();
     /*构造函数*/
-    constructor({ el, stats, options, namespaced }) {
-        // 绑定store
-        let { sceneManage, sceneStructure } = store.state[namespaced];
-        store.state[namespaced].Element = Element;
-        this.sceneManage = sceneManage;
-        this.sceneStructure = sceneStructure;
+    constructor() {}
+    // 实例运行
+    init({ el, stats }) {
         // 根节点
         this.root = el;
         // 浏览器校验 true 则 启动threeJs
-        this.browserSupport({ ...options, stats });
+        this.browserSupport({ stats });
+        this.mounted(THREE);
     }
     /*浏览器支持校验*/
     browserSupport(options) {
@@ -58,41 +61,14 @@ export default class {
     /*创建场景*/
     createScene(options) {
         // 场景
-        let { scene, proxy: sceneDate } = Element['scene'].init();
+        new Element['scene']().example(this);
         // 加载FPS插件
-        let { stats, proxy: statsDate, loop: statsLoop } = Element['stats'].init(options.stats);
-        this.addLoopExtra('stats', statsLoop);
+        new Element['stats'](options.stats).example(this);
         // 渲染器
-        let { renderer, proxy: rendererDate } = Element['webGLRenderer'].init(options);
-
-        // 环境光
-        // let color = `#${new THREE.Color('#ffffff').getHexString()}`;
-        // let ambientLight = new THREE.AmbientLight(new THREE.Color(color).getStyle());
-        // scene.add(ambientLight);
+        new Element['webGLRenderer'](this.root).example(this);
         // 默认相机
-        let { camera, helper, proxy: cameraDate } = Element['perspectiveCamera'].init();
-        scene.add(helper);
-
-        this.sceneStructure.push({ name: '基础', children: [] });
-        [
-            { name: '场景', type: 'scene', uuid: 'scene', value: scene, proxy: sceneDate },
-            { name: '渲染器', type: 'renderer', uuid: 'WebGLRenderer', value: renderer, proxy: rendererDate },
-            { name: 'FPS', type: 'stats', uuid: 'FPS', value: stats, proxy: statsDate },
-            // { name: '环境光', type: 'ambientLight', uuid: ambientLight.uuid, value: ambientLight },
-            { name: '默认相机', type: 'camera', uuid: 'camera', value: camera, proxy: cameraDate }
-        ].forEach((em) => {
-            this.sceneManage[em.uuid] = em.proxy || em.value;
-            let { name, type, uuid } = em;
-            this.sceneStructure[0].children.push({ name, type, uuid });
-            // 劫持映射
-            Object.defineProperty(this, em.type, {
-                get: function () {
-                    return em.value;
-                }
-            });
-        });
+        new Element['perspectiveCamera'](this.renderer,10000).example({ example: this, defineProperty: true });
         this.onResize();
-        this.root.appendChild(renderer.domElement);
         this.render();
     }
     /*循环渲染*/
@@ -106,11 +82,12 @@ export default class {
     }
     /*动态视图窗*/
     onResize() {
-        let { camera, renderer } = this;
+        let { camera, renderer, root } = this;
         window.onresize = () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
+            let { offsetWidth, offsetHeight } = root;
+            camera.aspect = offsetWidth / offsetHeight;
             camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setSize(offsetWidth, offsetHeight);
         };
     }
     /*设置循环函数*/
@@ -119,39 +96,21 @@ export default class {
         renderExtra[key] = fun;
     }
     /*添加场景管理器*/
-    // eslint-disable-next-line no-unused-vars
     addSceneManage(key, object) {
-        // let { sceneManage } = this;
-        // if (Object.keys(sceneManage).includes(key)) {
-        //     console.error(`检测出场景管理仓已存在相同[${key}]对象,当前key值设置为${key}_`);
-        //     sceneManage[`${key}_`] = object;
-        //     return true;
-        // }
-        // sceneManage[key] = object;
-    }
-    /*拓展插件*/
-    expandPlugin(plugins) {
-        Object.keys(plugins).forEach((name) => {
-            let plugin = plugins[name];
-            this.plugins = this.plugins || {};
-            this.plugins[name] = {};
-            let init = false;
-            Object.getOwnPropertyNames(plugin.prototype).forEach((prop) => {
-                if (!/^constructor$/.test(prop)) {
-                    this.plugins[name][prop] = plugin.prototype[prop].bind(this);
-                    // 这里做个映射
-                    if (prop === 'init') {
-                        init = plugin.prototype[prop].bind(this);
-                    } else {
-                        Object.defineProperty(this, prop, {
-                            get: () => {
-                                return plugin.prototype[prop].bind(this);
-                            }
-                        });
-                    }
-                }
-            });
-            init && init(name);
+        let { sceneManage } = this;
+        let { proxyManage } = this.dataSet;
+        if (Object.keys(proxyManage).includes(key)) {
+            console.error(`检测出场景管理仓已存在相同[${key}]对象,当前key值设置为${key}_`);
+            key = `${key}_`;
+        }
+        proxyManage[key] = object.proxy;
+        Object.defineProperty(proxyManage[key], 'value', {
+            get: function () {
+                return function () {
+                    return object.value;
+                };
+            }
         });
+        sceneManage[key] = object.value;
     }
 }

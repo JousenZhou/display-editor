@@ -13,12 +13,14 @@
             </section>
             <!--内容-->
             <footer ref="container">
-                <div v-for="(item, index) in mmdHelperArray" :key="index">
+                <div v-for="(item, index) in mmdHelperMap" :key="index">
                     <p
                         @click="selectModule(item)"
                         :style="{ width: `${(item.config.duration / this.maxTime) * 100}%` }"
-                        :status="item.uuid === vm_current.uuid"
-                    />
+                        :status="item.uuid === current.uuid"
+                    >
+                        {{ item.config.duration }}
+                    </p>
                 </div>
             </footer>
         </div>
@@ -27,19 +29,19 @@
 
 <script>
 import { Options, mixins } from 'vue-class-component';
-// eslint-disable-next-line no-unused-vars
-import { Ref, PropSync, Prop } from '@/decorator';
-import { computedVux } from '@/App/store/index';
-import { Watch } from '../../../../decorator';
+import { Ref, PropSync, Prop, Watch, Computed } from '@/decorator';
+import { computed } from '@/plugins/example';
 @Options({
     name: 'timeRuleControl',
     components: {}
 })
-export default class App extends mixins(computedVux) {
+@Computed(computed(['current', 'proxyManage']))
+export default class App extends mixins() {
     @Ref() slider;
     @Ref() container;
     @PropSync('value', { required: true }) val;
     @Prop({ required: true }) maxTime;
+    @Prop({ required: true }) mmdHelperMap;
     @Prop({ required: true }) scrollTop;
     @Watch('scrollTop')
     onScrollTop(value) {
@@ -55,14 +57,6 @@ export default class App extends mixins(computedVux) {
     width = 0;
     get left() {
         return this.val / this.maxTime;
-    }
-    // 过滤mmdHelper
-    get mmdHelperArray() {
-        return (this.vm_sceneStructure || [])
-            .filter((em) => em.type === 'mmdHelper')
-            .reduce((x, y) => {
-                return [...x, ...y.children];
-            }, []);
     }
     mousedown(e) {
         this.drag = e.clientX;
@@ -91,12 +85,12 @@ export default class App extends mixins(computedVux) {
     }
     // 选择模型
     selectModule(item) {
-        this.vm_current = item;
+        this.current = item;
     }
     // 同步动作
     synchronize(value) {
-        if (this.vm_sceneManage['mmdHelper']) {
-            let helper = this.vm_sceneManage['mmdHelper'];
+        if (this.proxyManage['mmdHelper']) {
+            let helper = this.proxyManage['mmdHelper'].value();
             helper.synchronize(value);
         }
     }
@@ -238,6 +232,7 @@ export default class App extends mixins(computedVux) {
                     height: 100%;
                     box-sizing: border-box;
                     border: 1px solid #000000;
+                    color: white;
                     &[status='true'] {
                         border: 1px solid white;
                     }

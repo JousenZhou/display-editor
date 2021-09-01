@@ -1,6 +1,6 @@
 <template>
     <div class="structure">
-        <el-tree ref="ElTree" :data="vm_sceneStructure" :highlight-current="true" node-key="uuid" :props="defaultProps" @node-click="handleNodeClick">
+        <el-tree ref="ElTree" :data="sceneStructure" :highlight-current="true" node-key="uuid" :props="defaultProps" @node-click="handleNodeClick">
             <template #default="{ data }">
                 <span class="el-tree-node__label" :id="data.uuid">{{ data.name }}</span>
             </template>
@@ -10,26 +10,26 @@
 
 <script>
 import { Options, mixins } from 'vue-class-component';
-import { computedVux } from '@/App/store/index';
-import { Watch, Ref } from '@/decorator';
-
+import { Watch, Ref, Computed } from '@/decorator';
+import { computed } from '@/plugins/example';
 @Options({
     name: 'structure',
     components: {}
 })
-export default class App extends mixins(computedVux) {
+@Computed(computed(['current', 'sceneStructure']))
+export default class App extends mixins() {
     @Ref() ElTree;
     defaultProps = {
         children: 'children',
         label: 'name'
     };
-    @Watch('vm_current.uuid')
+    @Watch('current.uuid')
     uIdChange(value) {
         this.ElTree.setCurrentKey(value);
     }
     handleNodeClick(target) {
-        if (target.uuid && target.uuid !== this.vm_current.uid) {
-            this.vm_current = { ...target };
+        if (target.uuid && target.uuid !== this.current.uuid) {
+            this.current = target;
         }
     }
 }

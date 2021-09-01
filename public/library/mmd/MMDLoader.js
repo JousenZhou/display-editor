@@ -68,11 +68,39 @@ THREE.MMDLoader = ( function () {
 		 * @param {function} onLoad
 		 * @param {function} onProgress
 		 * @param {function} onError
+		 * @param {string} type
+		 * @param {Array} resource
 		 */
-		load: function ( url, onLoad, onProgress, onError ) {
+		load: function ( url, onLoad, onProgress, onError, type = 'normal', resource = []) {
 
 			var builder = this.meshBuilder.setCrossOrigin( this.crossOrigin );
 
+			// blob上传
+			if(type === 'blob'){
+				// eslint-disable-next-line no-unused-vars
+				let suffix = this._extractExtension( url ).toLowerCase();
+				let resourcePath = '';
+				resource = resource.reduce((x,em)=>{
+					let blob = new Blob([em], { type: em.type });
+					let blobURL = window.URL.createObjectURL(blob);
+					let array = blobURL.split('/');
+					let uuId = array.pop();
+					if(!resourcePath){
+						resourcePath = array.join('/') + '/'
+					}
+
+					let key = em.webkitRelativePath.toLowerCase().split('/');
+					key.shift();
+					return {...x,[key.join('\\')]:uuId}
+				},{});
+				let urls = resourcePath + resource[url];
+				builder.resource = resource;
+				this[ suffix === 'pmd' ? 'loadPMD' : 'loadPMX' ]( urls, function ( data ) {
+					onLoad(	builder.build( data, resourcePath, onProgress, onError )	);
+				}, onProgress, onError );
+				return;
+			}
+			this.resource = null;
 			// resource path
 
 			var resourcePath;
@@ -86,14 +114,11 @@ THREE.MMDLoader = ( function () {
 				resourcePath = this.path;
 
 			} else {
-
 				resourcePath = THREE.LoaderUtils.extractUrlBase( url );
-
 			}
 
 			var modelExtension = this._extractExtension( url ).toLowerCase();
 
-			// Should I detect by seeing header?
 			if ( modelExtension !== 'pmd' && modelExtension !== 'pmx' ) {
 
 				if ( onError ) onError( new Error( 'THREE.MMDLoader: Unknown model file extension .' + modelExtension + '.' ) );
@@ -246,8 +271,7 @@ THREE.MMDLoader = ( function () {
 			for ( var i = 0, il = urls.length; i < il; i ++ ) {
 
 				this.loader.load( urls[ i ], function ( buffer ) {
-
-					vmds.push( parser.parseVmd( buffer, true ) );
+					vmds.push(parser.parseVmd( buffer, true ));
 
 					if ( vmds.length === vmdNum ) onLoad( parser.mergeVmds( vmds ) );
 
@@ -375,7 +399,7 @@ THREE.MMDLoader = ( function () {
 			var geometry = this.geometryBuilder.build( data );
 			var material = this.materialBuilder
 				.setCrossOrigin( this.crossOrigin )
-				.setResourcePath( resourcePath )
+				.setResourcePath( resourcePath, this.resource)
 				.build( data, geometry, onProgress, onError );
 
 			var mesh = new THREE.SkinnedMesh( geometry, material );
@@ -895,7 +919,7 @@ THREE.MMDLoader = ( function () {
 				if ( bodyA.type !== 0 && bodyB.type === 2 ) {
 
 					if ( bodyA.boneIndex !== - 1 && bodyB.boneIndex !== - 1 &&
-					     data.bones[ bodyB.boneIndex ].parentIndex === bodyA.boneIndex ) {
+						data.bones[ bodyB.boneIndex ].parentIndex === bodyA.boneIndex ) {
 
 						bodyB.type = 1;
 
@@ -984,9 +1008,10 @@ THREE.MMDLoader = ( function () {
 		 * @param {string} resourcePath
 		 * @return {MaterialBuilder}
 		 */
-		setResourcePath: function ( resourcePath ) {
+		setResourcePath: function ( resourcePath,resource ) {
 
 			this.resourcePath = resourcePath;
+			this.resource = resource;
 			return this;
 
 		},
@@ -1113,7 +1138,8 @@ THREE.MMDLoader = ( function () {
 						visible: material.edgeFlag === 1
 					};
 
-				} else {
+				}
+				else {
 
 					// map
 
@@ -1147,7 +1173,8 @@ THREE.MMDLoader = ( function () {
 						toonFileName = 'toon' + ( '0' + ( material.toonIndex + 1 ) ).slice( - 2 ) + '.bmp';
 						isDefaultToon = true;
 
-					} else {
+					}
+					else {
 
 						toonFileName = data.textures[ material.toonIndex ];
 						isDefaultToon = false;
@@ -1273,11 +1300,9 @@ THREE.MMDLoader = ( function () {
 		},
 
 		_loadTexture: function ( filePath, textures, params, onProgress, onError ) {
-
 			params = params || {};
 
 			var scope = this;
-
 			var fullPath;
 
 			if ( params.isDefaultToonTexture === true ) {
@@ -1300,9 +1325,13 @@ THREE.MMDLoader = ( function () {
 				fullPath = DEFAULT_TOON_TEXTURES[ index ];
 
 			} else {
-
-				fullPath = this.resourcePath + filePath;
-
+				if(scope.resource){
+					filePath = filePath.replace('/','\\').toLowerCase();
+					fullPath = this.resourcePath + scope.resource[filePath];
+				}
+				else{
+					fullPath = this.resourcePath + filePath;
+				}
 			}
 
 			if ( textures[ fullPath ] !== undefined ) return textures[ fullPath ];

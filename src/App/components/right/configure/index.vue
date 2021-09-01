@@ -7,22 +7,23 @@
 <script>
 import { Options, mixins } from 'vue-class-component';
 import itemElement from './components/itemElement';
-import { computedVux } from '@/App/store/index';
-import { Watch } from '@/decorator';
+import { Watch, Computed } from '@/decorator';
 // eslint-disable-next-line no-unused-vars
+import example, { computed } from '@/plugins/example';
 import config from './config';
+@Computed(computed(['current', 'proxyManage']))
 @Options({
     name: 'configure',
     components: { itemElement }
 })
-export default class App extends mixins(computedVux) {
+export default class App extends mixins() {
     renderList = [];
     renderData = {};
-    @Watch('vm_current.uuid')
+    @Watch('current.uuid')
     onIdChange(uuId) {
-        if (this.vm_current.type) {
-            this.renderList = config[this.vm_current.type];
-            this.renderData = this.vm_sceneManage[uuId];
+        if (this.current.type) {
+            this.renderList = config[this.current.type];
+            this.renderData = this.proxyManage[uuId];
         }
     }
 }

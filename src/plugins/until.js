@@ -69,5 +69,34 @@ export const test = function (object) {
             return object;
         }
     }).mount(document.createElement('div'));
-    return _.$data
+    return _.$data;
+};
+export const treeSearch = function (array, value, key) {
+    for (let a = 0; a < array.length; a++) {
+        if (array[a][key] === value) {
+            return array[a];
+        } else if (Array.isArray(array[a].children)) {
+            let res = treeSearch(array[a].children, value, key);
+            if (res) {
+                return res;
+            }
+        }
+    }
+};
+export const treeSearchSync = function (array, value, key) {
+    return new Promise((resolve, reject) => {
+        let result = treeSearch(array, value, key);
+        result ? resolve(result) : reject('在树结构找不到对应值');
+    });
+};
+export const treeFilter = function (array, value, key) {
+    return (array || []).reduce((x, y) => {
+        if (Array.isArray(y.children)) {
+            return [...x, ...treeFilter(y.children, value, key)];
+        }
+        if (Array.isArray(y[key]) ? y[key].includes(value) : y[key] === value) {
+            return [...x, y];
+        }
+        return x;
+    }, []);
 };

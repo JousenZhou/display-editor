@@ -1,19 +1,26 @@
 <template>
     <footer>
-        <bottom.timescale v-model:value="vm_timestamp" v-model:scrollTop="scrollTop" />
-        <bottom.time-rule-control v-model:value="vm_timestamp" :maxTime="300" :scrollTop="scrollTop" />
+        <bottom.timescale v-model:mmdHelperMap="mmdHelperArray" v-model:value="timestamp" v-model:scrollTop="scrollTop" />
+        <bottom.time-rule-control v-model:mmdHelperMap="mmdHelperArray" v-model:value="timestamp" :maxTime="300" :scrollTop="scrollTop" />
     </footer>
 </template>
 
 <script>
 import { Options, mixins } from 'vue-class-component';
-import { computedVux } from '@/App/store/index';
+import { treeFilter } from '@/plugins/until';
+import { Computed } from '@/decorator';
+import { computed } from '@/plugins/example';
 @Options({
     name: 'bottom',
     components: {}
 })
-export default class App extends mixins(computedVux) {
+@Computed(computed(['sceneStructure', 'timestamp']))
+export default class App extends mixins() {
     scrollTop = 0;
+    // 过滤mmdHelper
+    get mmdHelperArray() {
+        return treeFilter(this.sceneStructure, 'mmdGroup', 'ascription');
+    }
 }
 </script>
 <style lang="scss" scoped>

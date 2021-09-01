@@ -1,8 +1,12 @@
+import { elementExample } from './index';
+
 let { Stats } = window;
 import { proxy } from '../until';
-
-export default {
-    init(Element) {
+export default class {
+    stats = null;
+    proxy = null;
+    loop = null;
+    constructor(Element) {
         if (Element) {
             let stats = new Stats();
             stats.setMode(0);
@@ -20,15 +24,18 @@ export default {
                     Element.children[0].style.display = value ? '' : 'none';
                 }
             );
-            return {
-                stats,
-                proxy: hijack,
-                loop: () => {
-                    stats.update();
-                }
+            this.stats = stats;
+            this.proxy = hijack;
+            this.loop = () => {
+                stats.update();
             };
+        } else {
+            console.warn('请设置stats挂载的元素');
         }
-        console.warn('请设置stats挂载的元素');
-        return { stats: null, proxy: null, loop: () => {} };
     }
-};
+    example(example) {
+        example.addLoopExtra('stats', this.loop);
+        let object = { name: 'FPS', type: 'stats', uuid: 'FPS', value: this.stats, proxy: this.proxy };
+        elementExample(example, object, 'base', true);
+    }
+}

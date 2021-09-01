@@ -10,7 +10,7 @@ const vuxModule = {
         // 时间状态  // 状态 0 = 暂停 1 = 播放
         timestampStatus: 0,
         // 场景集合
-        sceneManage: {},
+        proxyManage: {},
         // 场景结构
         sceneStructure: [],
         // 元素

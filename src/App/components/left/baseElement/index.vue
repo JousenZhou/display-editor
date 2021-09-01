@@ -1,16 +1,17 @@
 <template>
     <div class="baseElement">
-        <el-collapse accordion v-model="activeNames">
-            <el-collapse-item v-for="(item, index) in list" :key="index" :name="index">
+        <el-collapse :accordion="false" v-model="activeNames">
+            <el-collapse-item v-for="(item, index) in renderList" :key="index" :name="index">
                 <template #title>
                     <header>
                         <i :class="activeNames === index ? 'el-icon-caret-bottom' : 'el-icon-caret-right'" />
                         <i :class="item.icon" />
                         <span>{{ item.name }}</span>
+                        <label @click="item.import(item)" v-if="item.import">导入</label>
                     </header>
                 </template>
                 <div class="item" v-for="(em, indexOf) in item.children" :key="indexOf">
-                    <article @click="control(em)"><i :class="item.icon" /></article>
+                    <article @click="control(em, item)"><i :class="item.icon" /></article>
                     <span>{{ em.name }}</span>
                 </div>
             </el-collapse-item>
@@ -20,27 +21,42 @@
 
 <script>
 import { Options, mixins } from 'vue-class-component';
-import { computedVux } from '@/App/store/index';
-// eslint-disable-next-line no-unused-vars
-import { Watch, Ref } from '@/decorator';
+import { Prop } from '@/decorator';
+import Element from '@/plugins/element';
+
 @Options({
     name: 'baseElement',
     components: {}
 })
-export default class App extends mixins(computedVux) {
-    list = [
-        {
-            name: '相机',
-            icon: 'el-icon-camera-solid',
-            children: [{ type: 'perspectiveCamera', name: '透视相机' }]
-        }
-    ];
+export default class App extends mixins() {
+    @Prop({ required: true }) renderList;
     activeNames = '';
-    control(item) {
-        if (this.vm_Element[item.type]) {
-            this.vm_Element[item.type].example();
+    control(em, item) {
+        if (Element[em.type]) {
+            new Element[em.type]().example({ param: em.param, ...item.param|| {} });
         }
     }
+    // importTest() {
+    //     let el = document.createElement('input');
+    //     el.setAttribute('type', 'file');
+    //     el.setAttribute('directory', 'true');
+    //     el.setAttribute('webkitdirectory', 'true');
+    //     el.onchange = function () {
+    //         // console.log(e);
+    //         // let resource = {};
+    //         // Array.from(el.files).forEach((em, index) => {
+    //         //     resource[em.webkitRelativePath] =
+    //         //     console.log(index,em);
+    //         //     // if (index === 0) {
+    //         //     //     let blob = new Blob([em], { type: em.type });
+    //         //     //     let blobURL = window.URL.createObjectURL(blob);
+    //         //     //     new Element['mmd']().example({ param: blobURL });
+    //         //     // }
+    //         // });
+    //         new Element['mmd']().example({ param: 'miku.pmx', loadType: 'blob', resource: Array.from(el.files) });
+    //     };
+    //     el.click();
+    // }
 }
 </script>
 <style lang="scss" scoped>
@@ -80,12 +96,13 @@ export default class App extends mixins(computedVux) {
                     margin-bottom: 10px;
                     cursor: pointer;
                     float: left;
-                    width: calc(50% - 5px);
+                    width: calc(33% - 6px);
                     height: 90px;
                     color: white;
-                    &:nth-of-type(2n + 1) {
-                        margin-right: 10px;
+                    &:nth-of-type(3n + 3) {
+                        margin-right: unset;
                     }
+                    margin-right: 10px;
                     article {
                         background: #432d43;
                         height: 60px;

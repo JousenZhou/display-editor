@@ -1,37 +1,22 @@
+import { elementExample } from './index';
+
 let { THREE } = window;
 import { proxy } from '../until';
-
-export default {
-    init(options) {
-        let {
-            alpha = false,
-            antialias = false,
-            shadowMapEnabled = false,
-            backgroundColor = '#ffffff',
-            width = window.innerWidth,
-            height = window.innerHeight
-        } = options;
-        // 实例
-        let renderer = new THREE.WebGLRenderer({
-            alpha,
-            antialias
-        });
-        renderer.shadowMap.enabled = shadowMapEnabled;
-        renderer.setClearColor(backgroundColor);
-        renderer.setSize(width, height);
-        renderer.setPixelRatio(window.devicePixelRatio);
-
-        // 劫持做数据映射[单向流] 映射对象到scene
+export default class {
+    renderer = null;
+    proxy = null;
+    constructor($el) {
+        let renderer,
+            width = $el.offsetWidth,
+            height = $el.offsetHeight;
         let hijack = proxy(
             {
-                alpha,
-                antialias,
-                shadowMapEnabled,
-                backgroundColor
+                alpha: true,
+                antialias: true,
+                shadowMapEnabled: true,
+                backgroundColor: '#000000'
             },
-            // controlType 操作类型(create delete modify)
-            // eslint-disable-next-line no-unused-vars
-            (controlType, { target, key, value, parentKey }) => {
+            (controlType, { key, value }) => {
                 if (key === 'alpha') {
                     renderer.alpha = value;
                 } else if (key === 'antialias') {
@@ -43,6 +28,22 @@ export default {
                 }
             }
         );
-        return { renderer, proxy: hijack };
+        // 实例
+        renderer = new THREE.WebGLRenderer({
+            alpha: hijack.alpha,
+            antialias: hijack.antialias
+        });
+        renderer.shadowMap.enabled = hijack.shadowMapEnabled;
+        renderer.setClearColor(hijack.backgroundColor);
+        renderer.setSize(width, height);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        $el.appendChild(renderer.domElement);
+        this.renderer = renderer;
+        this.proxy = hijack;
+        console.log(renderer);
     }
-};
+    example(example) {
+        let object = { name: '渲染器', type: 'renderer', uuid: 'WebGLRenderer', value: this.renderer, proxy: this.proxy };
+        elementExample(example, object, 'base', true);
+    }
+}

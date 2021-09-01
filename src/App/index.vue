@@ -2,7 +2,10 @@
     <div class="view-editor">
         <section>
             <left />
-            <div ref="ThreeJs" />
+            <div>
+                <article ref="ThreeJs" />
+                <center-control />
+            </div>
             <right />
         </section>
         <bottom />
@@ -12,8 +15,7 @@
 <script>
 import { Options, mixins } from 'vue-class-component';
 import { Ref } from '@/decorator';
-import ThreeJs from '@/plugins/editor';
-import example2 from '@/plugins/example2';
+import example from '@/plugins/example';
 import { registerVuexModule } from './store';
 @Options({
     name: 'App',
@@ -23,20 +25,10 @@ export default class App extends mixins(registerVuexModule) {
     @Ref('Stats') Stats;
     @Ref('ThreeJs') ThreeJs;
     mounted() {
-        let this_ = this;
-        let threeJsEngine = new ThreeJs({
+        example.init({
             el: this.ThreeJs,
-            stats: this.ThreeJs,
-            namespaced:'threeJs',
-            options: {
-                backgroundColor: '#ffffff',
-                alpha: true,
-                antialias: true,
-                shadowMapEnabled: true
-            }
+            stats: this.ThreeJs
         });
-        window.Engine = threeJsEngine;
-        threeJsEngine.mounted(example2, this_);
     }
 }
 </script>
@@ -51,12 +43,12 @@ export default class App extends mixins(registerVuexModule) {
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    section {
+    > section {
         flex: 2.5;
         overflow: hidden;
         display: flex;
         > div {
-            width: 280px;
+            width: 320px;
             &:nth-of-type(1) {
                 /*
                 box-shadow: -2px 2px 2px #666666, 2px -2px 2px #ffffff;
@@ -67,20 +59,23 @@ export default class App extends mixins(registerVuexModule) {
                 flex: 1;
                 overflow: hidden;
                 position: relative;
-                ::v-deep canvas {
-                    width: 100% !important;
-                    height: 100% !important;
+                display: flex;
+                flex-direction: column;
+                article {
+                    flex: 1;
+                    overflow: hidden;
+                    ::v-deep canvas {
+                        width: 100% !important;
+                        height: 100% !important;
+                    }
                 }
             }
             &:nth-of-type(3) {
                 color: white;
-                /*
-                box-shadow: 2px 2px 2px #666666, -2px -2px 2px #ffffff;
-*/
             }
         }
     }
-    footer {
+    > footer {
         flex: 1;
         overflow: hidden;
         /*

@@ -5,7 +5,7 @@
             <div>
                 <span> {{ timer }}</span>
                 <span>
-                    <svg-icon @click="statusChange" :iconClass="vm_timestampStatus ? 'icon-pause' : 'icon-play'" />
+                    <svg-icon @click="statusChange" :iconClass="timestampStatus ? 'icon-pause' : 'icon-play'" />
                     <svg-icon @click="statusStop" iconClass="icon-stop" />
                 </span>
             </div>
@@ -21,7 +21,7 @@
                 </span>
             </p>
             <div @scroll="scrollEvent">
-                <p v-for="(item, index) in mmdHelperArray" :key="index" @click="selectModule(item)" :status="vm_current.uuid === item.uuid">
+                <p v-for="(item, index) in mmdHelperMap" :key="index" @click="selectModule(item)" :status="current.uuid === item.uuid">
                     <span v-for="em in columnHeader" :key="em.value">
                         {{ item[em.value] }}
                     </span>
@@ -33,19 +33,21 @@
 
 <script>
 import { Options, mixins } from 'vue-class-component';
-import { PropSync, Watch } from '@/decorator';
-import { computedVux } from '@/App/store/index';
+import { PropSync, Watch, Prop, Computed } from '@/decorator';
+import { computed } from '@/plugins/example';
 @Options({
     name: 'timescale',
     components: {}
 })
-export default class App extends mixins(computedVux) {
+@Computed(computed(['timestampStatus', 'proxyManage', 'timestamp', 'current']))
+export default class App extends mixins() {
     @PropSync('value', { required: true }) val;
     @PropSync('scrollTop', { required: true }) scroll;
-    @Watch('vm_timestampStatus')
+    @Prop({ required: true }) mmdHelperMap;
+    @Watch('timestampStatus')
     onStatusChange(status) {
-        if (this.vm_sceneManage['mmdHelper']) {
-            let helper = this.vm_sceneManage['mmdHelper'];
+        if (this.proxyManage['mmdHelper']) {
+            let helper = this.proxyManage['mmdHelper'].value();
             status ? helper.start() : helper.stop();
         }
     }
@@ -70,27 +72,19 @@ export default class App extends mixins(computedVux) {
         res += ms < 10 ? `00${ms}` : ms < 100 ? `0${ms}` : ms;
         return res;
     }
-    // 过滤mmdHelper
-    get mmdHelperArray() {
-        return this.vm_sceneStructure
-            .filter((em) => em.type === 'mmdHelper')
-            .reduce((x, y) => {
-                return [...x, ...y.children];
-            }, []);
-    }
     // 状态修改
     statusChange() {
-        this.vm_timestampStatus = this.vm_timestampStatus ? 0 : 1;
+        this.timestampStatus = this.timestampStatus ? 0 : 1;
     }
     // 停止
     statusStop() {
-        this.vm_timestampStatus = 0;
-        this.vm_timestamp = 0;
-        this.synchronize(this.vm_timestamp);
+        this.timestampStatus = 0;
+        this.timestamp = 0;
+        this.synchronize(this.timestamp);
     }
     // 选择模型
     selectModule(item) {
-        this.vm_current = item;
+        this.current = item;
     }
     // 滚动事件
     scrollEvent(e) {
@@ -98,8 +92,8 @@ export default class App extends mixins(computedVux) {
     }
     // 同步动作
     synchronize(value) {
-        if (this.vm_sceneManage['mmdHelper']) {
-            let helper = this.vm_sceneManage['mmdHelper'];
+        if (this.proxyManage['mmdHelper']) {
+            let helper = this.proxyManage['mmdHelper'].value();
             helper.synchronize(value);
         }
     }

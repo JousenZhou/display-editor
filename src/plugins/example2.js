@@ -1,20 +1,18 @@
+// import Element from './element';
 // eslint-disable-next-line no-unused-vars
-import { initDragControls, initialScene, MMdDrive, ambient, directional } from '@/plugins/plugins';
-// import { useStore } from 'vuex';
-// eslint-disable-next-line no-unused-vars
-export default async function (THREE, Vue) {
-    this.expandPlugin({ MMdDrive,initDragControls });
-    // eslint-disable-next-line no-unused-vars
-    let { loadMMdModel, loadMMdAnimation, MMdBindAnimation, loadMMdCamera, createdMMdHelper, helperRelateMMd, helperRelateCamera } = this;
-    // eslint-disable-next-line no-unused-vars
-    let { scene } = this;
-    // 模拟
-    let helper = createdMMdHelper({}, 'mmdHelper');
+export default async function (THREE) {
 
-    this.sceneStructure.push({ name: 'MMD-Helper', type: 'mmdHelper', children: [], uuid: 'MMdHelp' });
-    // let mesh = await loadMMdModel({ pmx: 'http://127.0.0.1:3000/mmdModel/Reinhardt.pmx' });
+    // eslint-disable-next-line no-unused-vars
+    // let { scene } = this;
+    // Element['mmd'].initMMdHelper();
+
+    // let helper = createdMMdHelper({}, 'mmdHelper');
+
+    // this.sceneStructure.push({ name: 'MMD-Helper', type: 'mmdHelper', children: [], uuid: 'MMdHelp' });
+    // // let mesh = await loadMMdModel({ pmx: 'http://127.0.0.1:3000/mmdModel/Reinhardt.pmx' });
+    // let mesh = await loadMMdModel({ pmx: 'http://127.0.0.1:3000/miku/miku.pmx' });
+    //
     // mesh.position.set(0, 0, 0);
-    // mesh.scale.set(10, 10, 10);
     // mesh.visible = true;
     // scene.add(mesh);
     // let animation = await loadMMdAnimation({ vmdUrl: ['http://127.0.0.1:3000/mmdAnimation/action.vmd'] });
@@ -23,13 +21,13 @@ export default async function (THREE, Vue) {
     // mesh.duration = animation_.duration;
     // this.sceneStructure[1].children.push({ name: '莱茵哈特', type: mesh.type, uuid: mesh.uuid, config: { duration: mesh.duration } });
 
-    this.addLoopExtra('mmdHelper', () => {
-        let _ = this.clock.getDelta();
-        helper.update(_);
-        if (Vue.vm_timestampStatus) {
-            Vue.vm_timestamp += _;
-        }
-    });
+    // this.addLoopExtra('mmdHelper', () => {
+    //     let _ = this.clock.getDelta();
+    //     helper.update(_);
+    //     if (Vue.vm_timestampStatus) {
+    //         Vue.vm_timestamp += _;
+    //     }
+    // });
 
     // var spotLight = new THREE.SpotLight(0xffffff);
     // spotLight.position.set(-40, 400, -10);
@@ -58,7 +56,7 @@ export default async function (THREE, Vue) {
     //     this.clock.stop();
     //     this.clock.elapsedTime = 0
     // }, 3000);
-    this.init_kms();
+    // this.init_kms();
     // /** 普通场景测试*/
     // let planeGeometry = new THREE.PlaneGeometry(600, 200, 1, 1);
     // var planeMaterial = new THREE.MeshLambertMaterial({color: 0xffffff});
@@ -97,45 +95,78 @@ export default async function (THREE, Vue) {
     //     sphere.position.y = 2 + 10 * Math.abs(Math.sin(step));
     // });
 
-    var planeGeometry = new THREE.PlaneGeometry(60, 40, 1, 1);
-    var planeMaterial = new THREE.MeshLambertMaterial({ color: 0xffffff });
-    var plane = new THREE.Mesh(planeGeometry, planeMaterial);
-    plane.receiveShadow = true;
+    // var planeGeometry = new THREE.PlaneGeometry(60, 40, 1, 1);
+    // var planeMaterial = new THREE.MeshLambertMaterial({ color: 0xffffff });
+    // var plane = new THREE.Mesh(planeGeometry, planeMaterial);
+    // plane.receiveShadow = true;
+    //
+    // // rotate and position the plane
+    // plane.rotation.x = -0.5 * Math.PI;
+    // plane.position.x = 0;
+    // plane.position.y = 0;
+    // plane.position.z = 0;
+    //
+    // // add the plane to the scene
+    // scene.add(plane);
+    //
+    // // eslint-disable-next-line no-unused-vars
+    // var ambientLight = new THREE.AmbientLight(0x0c0c0c);
+    // scene.add(ambientLight);
 
-    // rotate and position the plane
-    plane.rotation.x = -0.5 * Math.PI;
-    plane.position.x = 0;
-    plane.position.y = 0;
-    plane.position.z = 0;
 
-    // add the plane to the scene
-    scene.add(plane);
 
-    var ambientLight = new THREE.AmbientLight(0x0c0c0c);
-    scene.add(ambientLight);
-    var spotLight = new THREE.SpotLight(0xffffff);
-    spotLight.position.set(-40, 60, -10);
-    spotLight.castShadow = true;
-    scene.add(spotLight);
+    // let color = `#${new THREE.Color('#ffffff').getHexString()}`;
+    // let { x: px = 0, y: py =400, z: pz = 600 } = {};
+    // let directionalLight = new THREE.DirectionalLight(new THREE.Color(color).getStyle());
+    // directionalLight.position.set(px, py, pz);
+    // directionalLight.castShadow = true;
+    // directionalLight.intensity = .8;
+    // directionalLight.distance = 10;
+    // // 阴影修复
+    // directionalLight.shadow.mapSize.x = 2048;
+    // directionalLight.shadow.mapSize.y = 2048;
+    // directionalLight.shadow.camera.near = 2;
+    // directionalLight.shadow.camera.far = 200;
+    // directionalLight.shadow.camera.right = 50;
+    // directionalLight.shadow.camera.top = 50;
+    // directionalLight.shadow.camera.left = -50;
+    // directionalLight.shadow.camera.bottom = -50;
+    // directionalLight.shadow.bias = -0.001;
+    // // 光线辅助类
+    // let cameraHelper = new THREE.CameraHelper(directionalLight.shadow.camera);
+    // let sphereLight = new THREE.SphereGeometry(1);
+    // let sphereLightMaterial = new THREE.MeshBasicMaterial({ color: new THREE.Color('red') });
+    // let sphereLightMesh = new THREE.Mesh(sphereLight, sphereLightMaterial);
+    // sphereLightMesh.castShadow = true;
+    // sphereLightMesh.position.copy(directionalLight.position);
+    // // 添加光线辅助骨架
+    // if (helper) {
+    //     scene.add(cameraHelper);
+    //     scene.add(sphereLightMesh);
+    // }
+    // scene.add(directionalLight);
+    // var spotLight = new THREE.SpotLight(0xffffff);
+    // spotLight.position.set(-40, 60, -10);
+    // spotLight.castShadow = true;
+    // scene.add(spotLight);
 
     // this.camera.position.x = -30;
     // this.camera.position.y = 40;
     // this.camera.position.z = 30;
     // this.camera.lookAt(scene.position);
 
-
-    for (let a = 0; a < 30; a++) {
-        var cubeSize = Math.ceil(Math.random() * 3);
-        var cubeGeometry = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
-        var cubeMaterial = new THREE.MeshLambertMaterial({ color: Math.random() * 0xffffff });
-        var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-        cube.castShadow = true;
-        // position the cube randomly in the scene
-        cube.position.x = -30 + Math.round(Math.random() * planeGeometry.parameters.width);
-        cube.position.y = Math.round(Math.random() * 5);
-        cube.position.z = -20 + Math.round(Math.random() * planeGeometry.parameters.height);
-
-        // add the cube to the scene
-        scene.add(cube);
-    }
+    // for (let a = 0; a < 30; a++) {
+    //     var cubeSize = Math.ceil(Math.random() * 3);
+    //     var cubeGeometry = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
+    //     var cubeMaterial = new THREE.MeshLambertMaterial({ color: Math.random() * 0xffffff });
+    //     var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+    //     cube.castShadow = true;
+    //     // position the cube randomly in the scene
+    //     cube.position.x = -30 + Math.round(Math.random() * planeGeometry.parameters.width);
+    //     cube.position.y = Math.round(Math.random() * 5);
+    //     cube.position.z = -20 + Math.round(Math.random() * planeGeometry.parameters.height);
+    //
+    //     // add the cube to the scene
+    //     scene.add(cube);
+    // }
 }
