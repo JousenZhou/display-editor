@@ -18,8 +18,8 @@
 
 # Usage 
 
-<a href="https://github.com/JousenZhou/display-editor"><img src="https://img.shields.io/badge/体验地址-green" /></a>： https://github.com/JousenZhou/display-editor
-<img src="/JousenZhou/display-editor/preview.png" style="zoom:150%;" />
+<a href="https://github.com/JousenZhou/display-editor"><img src="https://img.shields.io/badge/体验地址-green" /></a>： https://jousenzhou.github.io/display-editor/example
+<img src="./preview.png" style="zoom:80%;" />
 开发，构建和运行。
 
 ```bash
@@ -34,7 +34,7 @@ yarn serve
 # 在浏览器访问 http://localhost:3000
 ```
 
-<img align="left" src="https://img.shields.io/badge/recode-提交记录-yellow" />
+<img align="left" src="https://img.shields.io/badge/recode-提交记录-yellow" /><br/>
 
 | 提交日期  |      | 描述                          |
 | :-------- | ---- | ----------------------------- |
@@ -42,3 +42,4 @@ yarn serve
 | 2021/8/30 |      | 添加(光源/模型)元素以及UI控制  |
 | 2021/9/1  |      | 修改threeJs引擎为模块化       |
 | 2021/9/11 |      | threeJs模块引入优化，不走webpack编译           |
+| 2021/9/11 |      | readme.md 完善、添加体验地址           |
