@@ -4,7 +4,23 @@
  * @date 2021/5/26 13:40
  */
 import { createApp } from 'vue';
-
+import { watch } from 'vue';
+export const proxyWatch = function (object, callback, parentKey = []) {
+    if (typeof object === 'object') {
+        for (let key in object) {
+            if (typeof object[key] === 'object') {
+                proxyWatch(object[key], callback, [...parentKey, key]);
+            } else {
+                watch(
+                    () => object[key],
+                    (value) => {
+                        callback(value, key, parentKey, object);
+                    }
+                );
+            }
+        }
+    }
+};
 export const proxy = function (obj, callback, parentKey = []) {
     if (typeof obj === 'object') {
         for (let key in obj) {

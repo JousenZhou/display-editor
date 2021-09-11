@@ -7,7 +7,11 @@
                         <i :class="activeNames === index ? 'el-icon-caret-bottom' : 'el-icon-caret-right'" />
                         <i :class="item.icon" />
                         <span>{{ item.name }}</span>
-                        <label @click="item.import(item)" v-if="item.import">导入</label>
+                        <label v-if="item.import">
+                            <el-tooltip class="item" effect="light" :content="item.importTitle" placement="left">
+                                <svg-icon style="outline: unset" @click.stop="item.import(item)" iconClass="icon-import" className="icon-import" />
+                            </el-tooltip>
+                        </label>
                     </header>
                 </template>
                 <div class="item" v-for="(em, indexOf) in item.children" :key="indexOf">
@@ -23,6 +27,7 @@
 import { Options, mixins } from 'vue-class-component';
 import { Prop } from '@/decorator';
 import Element from '@/plugins/element';
+import example from '@/plugins/example';
 
 @Options({
     name: 'baseElement',
@@ -33,7 +38,10 @@ export default class App extends mixins() {
     activeNames = '';
     control(em, item) {
         if (Element[em.type]) {
-            new Element[em.type]().example({ param: em.param, ...item.param|| {} });
+            let constructor = { ...(em.param || {}), ...(item.param || {}) };
+            new Element[em.type](constructor, example); //.example({ param: em.param, ...(item.param || {}) });
+
+            // new Element[em.type]({ ...(em.param || {}), ...(item.param || {}) }).example({ param: em.param, ...(item.param || {}) });
         }
     }
     // importTest() {
@@ -63,6 +71,7 @@ export default class App extends mixins() {
 .baseElement {
     height: 100%;
     width: 100%;
+    overflow-y: auto;
     ::v-deep .el-collapse {
         border: none;
         .el-collapse-item {
@@ -81,11 +90,25 @@ export default class App extends mixins() {
                     display: none;
                 }
                 header {
+                    width: 100%;
                     padding: 0 10px;
+                    position: relative;
                     i {
                         &:nth-of-type(2) {
                             color: #c50eff;
                             margin: 0 4px;
+                        }
+                    }
+
+                    label {
+                        position: absolute;
+                        right: 10px;
+                        .icon-import {
+                            color: #f300ff;
+                            cursor: alias;
+                            &:hover {
+                                color: white;
+                            }
                         }
                     }
                 }
@@ -120,6 +143,9 @@ export default class App extends mixins() {
                         align-items: center;
                     }
                 }
+            }
+            &:last-of-type {
+                margin-bottom: unset;
             }
         }
     }

@@ -77,6 +77,11 @@ export default {
             label: '背景颜色',
             type: 'color',
             mapping: 'backgroundColor'
+        },
+        {
+            label: '轮廓效应',
+            type: 'switch',
+            mapping: 'outlineEffect'
         }
     ],
     camera: [
@@ -102,48 +107,6 @@ export default {
             ]
         },
         {
-            label: '旋转',
-            type: 'array',
-            children: [
-                {
-                    label: 'x',
-                    type: 'input',
-                    mapping: 'rotation._x'
-                },
-                {
-                    label: 'y',
-                    type: 'input',
-                    mapping: 'rotation._y'
-                },
-                {
-                    label: 'z',
-                    type: 'input',
-                    mapping: 'rotation._z'
-                }
-            ]
-        },
-        {
-            label: '朝向',
-            type: 'array',
-            children: [
-                {
-                    label: 'x',
-                    type: 'input',
-                    mapping: 'lookAt.x'
-                },
-                {
-                    label: 'y',
-                    type: 'input',
-                    mapping: 'lookAt.y'
-                },
-                {
-                    label: 'z',
-                    type: 'input',
-                    mapping: 'lookAt.z'
-                }
-            ]
-        },
-        {
             label: '网格辅助',
             type: 'switch',
             mapping: 'helperVisible'
@@ -162,7 +125,7 @@ export default {
             label: '动作数据',
             type: 'select',
             mapping: 'animation',
-            options: [{ label: '测试2', value: 'http://127.0.0.1:3000/mmdCamera/camera2.vmd' }]
+            options: [{ label: '测试2', value: 'http://www.jousenzhou.xyz:3000/mmdCamera/camera2.vmd' }]
         }
     ],
     directionalLight: [
@@ -245,7 +208,12 @@ export default {
             label: '动作数据',
             type: 'select',
             mapping: 'animation',
-            options: [{ label: '测试', value: 'http://127.0.0.1:3000/mmdAnimation/action3.vmd' }]
+            options: [{ label: '测试', value: 'http://www.jousenzhou.xyz:3000/mmdAnimation/action3.vmd' }]
+        },
+        {
+            label: '显示',
+            type: 'switch',
+            mapping: 'visible'
         }
     ],
     mmdScene: [

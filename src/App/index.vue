@@ -48,13 +48,15 @@ export default class App extends mixins(registerVuexModule) {
         overflow: hidden;
         display: flex;
         > div {
-            width: 320px;
+            width: 25%;
+            max-width: 320px;
             &:nth-of-type(1) {
                 /*
                 box-shadow: -2px 2px 2px #666666, 2px -2px 2px #ffffff;
 */
             }
             &:nth-of-type(2) {
+                max-width: unset;
                 margin: 10px;
                 flex: 1;
                 overflow: hidden;
@@ -76,7 +78,7 @@ export default class App extends mixins(registerVuexModule) {
         }
     }
     > footer {
-        flex: 1;
+        flex: 0.6;
         overflow: hidden;
         /*
         box-shadow: 2px 2px 2px #666666, -2px -2px 2px #ffffff;

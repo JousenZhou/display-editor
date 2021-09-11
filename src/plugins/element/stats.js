@@ -1,41 +1,56 @@
 import { elementExample } from './index';
-
-let { Stats } = window;
-import { proxy } from '../until';
+let { Stats } = require('@/main').default.Module;
+import { proxyWatch } from '../until';
+import { reactive } from 'vue';
 export default class {
-    stats = null;
-    proxy = null;
-    loop = null;
+    stats = new Stats();
+    default = () => {
+        return {
+            display: true
+        };
+    };
+    properties = null;
     constructor(Element) {
-        if (Element) {
-            let stats = new Stats();
-            stats.setMode(0);
-            stats.domElement.style.position = 'absolute';
-            stats.domElement.style.right = '-10px';
-            stats.domElement.style.top = '-6px';
-            stats.domElement.style.transform = 'scale(0.8)';
-            Element.appendChild(stats.domElement);
-            // 劫持做数据映射[单向流] 映射对象到scene
-            let hijack = proxy(
-                {
-                    display: true
-                },
-                (controlType, { value }) => {
-                    Element.children[0].style.display = value ? '' : 'none';
-                }
-            );
-            this.stats = stats;
-            this.proxy = hijack;
-            this.loop = () => {
-                stats.update();
-            };
-        } else {
-            console.warn('请设置stats挂载的元素');
-        }
+        let { stats } = this;
+        stats.setMode(0);
+        Object.assign(stats.domElement.style, {
+            width: '100px',
+            position: 'absolute',
+            right: '-10px',
+            left: 'unset',
+            top: '-6px',
+            transform: 'scale(0.8)'
+        });
+        Element.appendChild(stats.domElement);
+        this.proxyProperties();
     }
+    // 构造代理属性
+    proxyProperties() {
+        let { stats } = this;
+        let properties = reactive(this.default());
+        proxyWatch(properties, (value, key) => {
+            if (key === 'display') {
+                Object.assign(stats.domElement.style, {
+                    display: value ? '' : 'none'
+                });
+            }
+        });
+        this.properties = properties;
+    }
+    // 实例后绑定至example对象 以及 添加结构 还有集合管理
     example(example) {
-        example.addLoopExtra('stats', this.loop);
-        let object = { name: 'FPS', type: 'stats', uuid: 'FPS', value: this.stats, proxy: this.proxy };
+        example.addLoopExtra('FPS', this.stats.update.bind(this.stats));
+        let object = { name: 'FPS', type: 'stats', uuid: 'FPS', value: this, proxy: this.properties };
         elementExample(example, object, 'base', true);
+    }
+    // 重置
+    reset() {
+        // 重置代理数据集合
+        Object.assign(this.properties, this.default());
+    }
+    // 参数加载
+    loadProperties(options) {
+        // 重置代理数据集合
+        Object.assign(this.properties, options);
     }
 }

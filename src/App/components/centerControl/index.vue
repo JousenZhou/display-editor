@@ -1,5 +1,9 @@
 <template>
     <div class="center-control">
+        <span @click="exportJSON" style="color: white">导出</span>
+        <span @click="importJSON" style="color: white">导入</span>
+        <span @click="reset" style="color: white">重置</span>
+
         <el-select size="mini" v-model="currentCameraId" placeholder="请选择" @change="cameraChange">
             <el-option v-for="item in cameraSet" :key="item.uuid" :label="item.name" :value="item.uuid"> </el-option>
         </el-select>
@@ -26,6 +30,18 @@ export default class App extends mixins() {
     cameraChange(uuId) {
         example.camera = this.proxyManage[uuId].value();
     }
+    // 导出
+    exportJSON() {
+
+        example.export();
+    }
+    importJSON(){
+        example.import();
+    }
+    // 重置
+    reset() {
+        example.reset();
+    }
 }
 </script>
 <style lang="scss" scoped>
@@ -33,8 +49,8 @@ export default class App extends mixins() {
     height: 28px;
     display: flex;
     background: #281928;
-    align-items: flex-end;
-    justify-content: flex-end;
+    align-items: center;
+    justify-content: space-between;
     color: white;
     border: 1px solid #281928;
     ::v-deep .el-select {

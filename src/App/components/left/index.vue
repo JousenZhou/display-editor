@@ -47,8 +47,9 @@ export default class App extends mixins() {
                     name: '人物',
                     icon: 'el-icon-s-custom',
                     param: {
-                        modelType: 'mmd-character'
+                        modelType: 'character'
                     },
+                    importTitle: '本地导入',
                     import: (item) => {
                         let el = document.createElement('input');
                         el.setAttribute('type', 'file');
@@ -60,17 +61,41 @@ export default class App extends mixins() {
                         el.click();
                     },
                     children: [
-                        { type: 'mmd', name: '莱因哈特', param: 'http://127.0.0.1:3000/mmdModel/Reinhardt.pmx' },
-                        { type: 'mmd', name: '初音未来', param: 'http://127.0.0.1:3000/ThreeJs_MMD/obj/model/MIKU_ by_ KiraKoTova.pmx' }
-                        ]
+                        { type: 'mmd', name: '莱因哈特', param: { url: 'http://www.jousenzhou.xyz:3000/mmdModel/Reinhardt.pmx' } },
+                        { type: 'mmd', name: 'xx', param: 'http://www.jousenzhou.xyz:3000/ThreeJs_MMD/obj/model/MIKU_ by_ KiraKoTova.pmx' },
+                        { type: 'mmd', name: '初音未来', param: { url: 'http://www.jousenzhou.xyz:3000/miku/miku.pmx' } },
+                        { type: 'mmd', name: '测试模型1', param: 'http://www.jousenzhou.xyz:3000/fantasy/fantasy.pmx' },
+                        { type: 'mmd', name: '测试模型2', param: 'http://www.jousenzhou.xyz:3000/model/wgsmiku/Sour Classic Miku.pmx' },
+                        { type: 'mmd', name: '测试模型3', param: 'http://www.jousenzhou.xyz:3000/model/Deep Sea/Deep Sea Girl.pmx' },
+                        {
+                            type: 'mmd',
+                            name: '测试模型4',
+                            param: 'http://www.jousenzhou.xyz:3000/model/TDA High Princess Haku/TDA High Princess Haku Ver.1.02.pmx'
+                        },
+                        { type: 'mmd', name: '测试模型5', param: 'http://www.jousenzhou.xyz:3000/model/TDA Miku Night  Winter/MIKU402 (1).pmx' },
+                        { type: 'mmd', name: '测试模型6', param: 'http://www.jousenzhou.xyz:3000/model/TDA Angel Miku/Miku.pmx' },
+                        { type: 'mmd', name: '测试模型7', param: 'http://www.jousenzhou.xyz:3000/model/TDA Angel Miku/Miku (with wings and buns).pmx' },
+                        { type: 'mmd', name: '测试模型8', param: 'http://www.jousenzhou.xyz:3000/model/律化鸭/重装小兔摩托.pmx' },
+                        { type: 'mmd', name: '测试模型9', param: 'http://www.jousenzhou.xyz:3000/model/律化鸭/律化鸭配布版.pmx' },
+                        { type: 'mmd', name: '测试模型10', param: 'http://www.jousenzhou.xyz:3000/model/496/Bikini Haku.pmx' },
+                        { type: 'mmd', name: '测试模型11', param: 'http://www.jousenzhou.xyz:3000/model/Ocean Party Miku/Hatsune Miku Update v2.0.pmx' }
+                    ]
                 },
                 {
                     name: '场景',
                     icon: 'el-icon-s-custom',
                     param: {
-                        modelType: 'mmd-scene'
+                        modelType: 'scene'
                     },
-                    children: [{ type: 'mmd', name: '共鸣', param: 'http://127.0.0.1:3000/mikuScene/椛暗式/椛暗式-共鳴ver1.1.pmx' }]
+                    children: [
+                        { type: 'mmd', name: '共鸣', param: { url: 'http://www.jousenzhou.xyz:3000/mikuScene/椛暗式/椛暗式-共鳴ver1.1.pmx' } },
+                        { type: 'mmd', name: '场景模型2', param: 'http://www.jousenzhou.xyz:3000/ThreeJs_MMD/scene/123.pmx' },
+                        { type: 'mmd', name: '场景模型3', param: 'http://www.jousenzhou.xyz:3000/mikuScene/lottery/Friendship prize pool.pmx' },
+                        { type: 'mmd', name: '场景模型4', param: 'http://www.jousenzhou.xyz:3000/mikuScene/草木が緑/草木が緑.pmx' },
+                        { type: 'mmd', name: '场景模型5', param: 'http://www.jousenzhou.xyz:3000/mikuScene/番傘と明かり配布用/bg.pmx' },
+                        { type: 'mmd', name: '场景模型6', param: 'http://www.jousenzhou.xyz:3000/mikuScene/XM H3stage/崩坏3天命总部部分.pmx' },
+                        { type: 'mmd', name: '场景模型7', param: 'http://www.jousenzhou.xyz:3000/mikuScene/桃の花ステージ【配布】/桃の花ステージ.pmx' }
+                    ]
                 }
             ]
         }

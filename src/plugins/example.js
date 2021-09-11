@@ -1,19 +1,12 @@
 import editor from './editor';
-// eslint-disable-next-line no-unused-vars
-import { reactive, ref } from 'vue';
-// import { reactive } from 'vue';
 const example = new editor();
+// eslint-disable-next-line no-unused-vars
 import { initMmdHelper } from './element/mmd';
 // eslint-disable-next-line no-unused-vars
 import ElementDirectionalLight from './element/directionalLight';
 
 // 数据集合
-let dataSet = Object.assign(example.dataSet, {
-    current: {},
-    currentCameraId: '',
-    timestampStatus: 0,
-    timestamp: 0
-});
+let dataSet = example.dataSet;
 // computed 双向绑定 引擎数据集合与Vue组件
 const computed = function (keyAttrs) {
     return keyAttrs.reduce((x, y) => {
@@ -34,12 +27,14 @@ const computed = function (keyAttrs) {
 // 脚本
 // eslint-disable-next-line no-unused-vars
 example.mounted = function (THREE) {
+    // console.log(this);
     // 设置相机当前默认Id
-    dataSet.currentCameraId = this.camera.uuid;
+    // dataSet.currentCameraId = this.camera.uuid;
     // 初始化MMD驱动器
-    initMmdHelper(this);
+    // initMmdHelper(this);
     // 添加平行光
     // new ElementDirectionalLight().example({ example: this });
+
     // setTimeout(() => {
     //     this.sceneStructure.push({ name: 'xxx' });
     // }, 3000);
@@ -55,13 +50,25 @@ example.mounted = function (THREE) {
     // plane.position.x = 0;
     // plane.position.y = 0;
     // plane.position.z = 0;
-    //
-    // // add the plane to the scene
+    // //
+    // // // add the plane to the scene
     // scene.add(plane);
     //
     // // eslint-disable-next-line no-unused-vars
     // var ambientLight = new THREE.AmbientLight(0x0c0c0c);
     // scene.add(ambientLight);
+
+    // const loader = new THREE.MMDLoader();
+    // const modelFile = 'models/mmd/miku/miku_v2.pmd';
+    // const vmdFiles = [ 'http://www.jousenzhou.xyz:3000/mmdAnimation/action3.vmd' ];
+    // loader.loadWithAnimation( modelFile, vmdFiles, function ( mmd ) {
+    //
+    //     let mesh = mmd.mesh;
+    //     mesh.position.y = - 10;
+    //     scene.add( mesh );
+    //
+    // });
 };
+
 export default example;
 export { computed };

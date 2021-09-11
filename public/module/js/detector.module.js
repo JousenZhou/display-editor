@@ -3,7 +3,7 @@
  * @author mr.doob / http://mrdoob.com/
  */
 
-var Detector = {
+var DetectorModule = {
     canvas: !!window.CanvasRenderingContext2D,
     webgl: (function () {
         try {
@@ -52,10 +52,10 @@ var Detector = {
         parent = parameters.parent !== undefined ? parameters.parent : document.body;
         id = parameters.id !== undefined ? parameters.id : 'oldie';
 
-        element = Detector.getWebGLErrorMessage();
+        element = DetectorModule.getWebGLErrorMessage();
         element.id = id;
 
         parent.appendChild(element);
     }
 };
-export default Detector
+export default DetectorModule

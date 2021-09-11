@@ -31,7 +31,7 @@ export const elementExample = function (example, object, parentType, definePrope
         }
     };
     if (parentType !== false) {
-        let index = sceneStructure.findIndex((em) => em.type === parentType);
+        let index = sceneStructure.findIndex((em) => em.type === parentType || em.pseudonym === parentType);
         if (~index) {
             sceneStructure[index].children.push(item);
         }
@@ -39,7 +39,7 @@ export const elementExample = function (example, object, parentType, definePrope
         sceneStructure.push(item);
     }
     example.addSceneManage(object.uuid, { proxy: object.proxy, value: object.value });
-    if (defineProperty) {
+    if (defineProperty && !example[object.type]) {
         Object.defineProperty(example, object.type, {
             get: function () {
                 return object.value;

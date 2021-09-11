@@ -22,7 +22,7 @@ export default class App extends mixins() {
     @Watch('current.uuid')
     onIdChange(uuId) {
         if (this.current.type) {
-            this.renderList = config[this.current.type];
+            this.renderList = config[this.current.pseudonym || this.current.type];
             this.renderData = this.proxyManage[uuId];
         }
     }

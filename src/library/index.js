@@ -3,9 +3,9 @@
  * @author JousenZhou
  * @date 2021/8/17 20:21
  */
-const base = ['three', 'Detector', 'stats', 'dat.gui'];
-const mmd = ['mmdparser.module', 'ammo', 'TGALoader', 'MMDLoader', 'OutlineEffect', 'CCDIKSolver', 'MMDPhysics', 'MMDAnimationHelper', 'Reflector'];
-const control = ['OrbitControls', 'TrackballControls', 'DragControls', 'TransformControls'];
+const base = ['ammo.wasm', 'Detector', 'stats', 'dat.gui'];
+const mmd = [];
+const control = [];
 export const library = [
     ...base.map((em) => `./library/${em}.js`),
     ...control.map((em) => `./library/control/${em}.js`),
