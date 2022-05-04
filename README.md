@@ -17,11 +17,12 @@
 
 
 # Usage 
-
+ps:体验版由于资源服务没启动，请求不到资源，请自行获取代码本地运行<br>
 <a href="https://github.com/JousenZhou/display-editor"><img src="https://img.shields.io/badge/体验地址-green" /></a>： https://jousenzhou.github.io/display-editor/example
 <img src="./preview.png" style="zoom:80%;" />
 开发，构建和运行。
 
+ps:Node版本必须要16以上，node-sass问题
 ```bash
 # 获取远程仓库代码
 git clone https://github.com/JousenZhou/display-editor
@@ -32,6 +33,14 @@ yarn
 # 启动项目
 yarn serve
 # 在浏览器访问 http://localhost:3000
+
+# 进入express目录
+cd express
+# 安装依赖
+yarn
+# 启动服务
+yarn start
+
 ```
 
 <img align="left" src="https://img.shields.io/badge/recode-提交记录-yellow" /><br/>
@@ -43,3 +52,11 @@ yarn serve
 | 2021/9/1  |      | 修改threeJs引擎为模块化       |
 | 2021/9/11 |      | threeJs模块引入优化，不走webpack编译           |
 | 2021/9/11 |      | readme.md 完善、添加体验地址           |
+
+<iframe src="https://www.qq.com" height="300" width="500"></iframe>
+```html
+ <a  href="https://github.com/gpujs/gpu.js">
+    <img src="https://img.shields.io/badge/gpujs-传送门-green" style="vertical-align: sub"/>
+    <span>https://github.com/gpujs/gpu.js</span>
+</a>
+```

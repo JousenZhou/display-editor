@@ -125,7 +125,10 @@ export default {
             label: '动作数据',
             type: 'select',
             mapping: 'animation',
-            options: [{ label: '测试2', value: 'http://www.jousenzhou.xyz:3000/mmdCamera/camera2.vmd' }]
+            options: [
+                { label: '忘了(建议用这个)', value: 'http://127.0.0.1:3000/mmdCamera/camera.vmd' },
+                { label: '不了', value: 'http://127.0.0.1:3000/mmdCamera/camera2.vmd' }
+            ]
         }
     ],
     directionalLight: [
@@ -208,7 +211,11 @@ export default {
             label: '动作数据',
             type: 'select',
             mapping: 'animation',
-            options: [{ label: '测试', value: 'http://www.jousenzhou.xyz:3000/mmdAnimation/action3.vmd' }]
+            options: [
+                { label: '动作数据1', value: 'http://127.0.0.1:3000/mmdAnimation/action.vmd' },
+                { label: '动作数据2', value: 'http://127.0.0.1:3000/mmdAnimation/action2.vmd' },
+                { label: '动作数据3(建议用这个)', value: 'http://127.0.0.1:3000/mmdAnimation/action3.vmd' },
+            ]
         },
         {
             label: '显示',

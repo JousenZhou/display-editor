@@ -60,7 +60,7 @@ example.mounted = function (THREE) {
 
     // const loader = new THREE.MMDLoader();
     // const modelFile = 'models/mmd/miku/miku_v2.pmd';
-    // const vmdFiles = [ 'http://www.jousenzhou.xyz:3000/mmdAnimation/action3.vmd' ];
+    // const vmdFiles = [ 'http://127.0.0.1:3000/mmdAnimation/action3.vmd' ];
     // loader.loadWithAnimation( modelFile, vmdFiles, function ( mmd ) {
     //
     //     let mesh = mmd.mesh;
